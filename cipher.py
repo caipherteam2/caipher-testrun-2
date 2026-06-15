@@ -147,19 +147,17 @@ def encoder(message: str) -> Union[bytes, int]:
     return encrypt(message.encode('utf-8'), "TWC_CIPHER_MASTER_KEY_2024")
 
 if __name__ == "__main__":
-    # Internal Verification
-    msg = "This is a production-ready TWC cipher implementation."
-    key = "secret_key"
+    import sys
+    if len(sys.argv) > 1:
+        # Use the first command line argument as the message to encrypt
+        msg_to_encrypt = sys.argv[1]
+    else:
+        # Fallback for demonstration
+        msg_to_encrypt = "The quick brown fox jumps over the lazy dog."
 
-    result = encrypt(msg.encode(), key)
-    print(f"Input: {msg}")
-    print(f"Encrypted (Hex): {result.hex()}")
-
-    # Requirement 3: Multi-block handling
-    assert len(result) >= 32
-    assert len(result) % 32 == 0
-
-    # Requirement 8 check
-    enc_out = encoder("Hello World")
-    print(f"Encoder Output: {enc_out.hex()}")
-    print("Verification Pass.")
+    # Use the production encoder logic
+    result = encoder(msg_to_encrypt)
+    if isinstance(result, bytes):
+        print(result.hex())
+    else:
+        print(result)
