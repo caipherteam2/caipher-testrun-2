@@ -110,8 +110,8 @@ def encrypt(plaintext: bytes, master_key: str) -> bytes:
         ciphertext_bin.extend(enc_block)
         prev_block = enc_block
 
-    # Final thing: C -> ... -> hexadecimal
-    return ciphertext_bin.hex().encode('utf-8')
+    # Return raw binary ciphertext bytes
+    return bytes(ciphertext_bin)
 
 def encoder(message: str) -> Union[bytes, int]:
     return encrypt(message.encode('utf-8'), "TWC_CIPHER_MASTER_KEY_2024")
@@ -119,4 +119,8 @@ def encoder(message: str) -> Union[bytes, int]:
 if __name__ == "__main__":
     import sys
     msg = sys.argv[1] if len(sys.argv) > 1 else "The quick brown fox jumps over the lazy dog."
-    print(encoder(msg).decode('utf-8'))
+    result = encoder(msg)
+    if isinstance(result, bytes):
+        print(result.hex())
+    else:
+        print(result)
